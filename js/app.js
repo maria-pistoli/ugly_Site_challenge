@@ -160,14 +160,14 @@
     });
   }
 
-  // Θέσεις στο πλέγμα των μαθημάτων (12 στήλες). Δεν επικαλύπτονται, αλλά δεν έχουν και καμία λογική.
+  // Θέσεις στο πλέγμα των μαθημάτων (6 στήλες). Δεν επικαλύπτονται, αλλά δεν έχουν και καμία λογική.
   const COURSE_SLOTS = [
-    { col: "7 / span 6", row: 1 },
-    { col: "1 / span 5", row: 2 },
-    { col: "5 / span 5", row: 3 },
-    { col: "2 / span 4", row: 4 },
-    { col: "9 / span 4", row: 4 },
-    { col: "6 / span 6", row: 5 },
+    { col: "3 / span 4", row: 1 },
+    { col: "1 / span 3", row: 2 },
+    { col: "4 / span 3", row: 2 },
+    { col: "2 / span 4", row: 3 },
+    { col: "1 / span 3", row: 4 },
+    { col: "4 / span 3", row: 4 },
   ];
 
   // ---------- κουμπιά που φεύγουν ----------
@@ -209,7 +209,7 @@
     const cards = COURSES.map((c, k) => {
       let style = small
         ? `width:${Math.round(rnd(70, 94))}%;margin-left:${Math.round(rnd(0, 24))}%;`
-        : `grid-column:${slots[k].col};grid-row:${slots[k].row};justify-self:${pick(["start", "end", "center", "stretch"])};margin-top:${Math.round(rnd(0, 50))}px;`;
+        : `grid-column:${slots[k].col};grid-row:${slots[k].row};justify-self:${pick(["start", "end", "center"])};margin-top:${Math.round(rnd(0, 34))}px;`;
       style += `transform:rotate(${rnd(-5, 5).toFixed(1)}deg)`;
       return `
         <div class="ccard" style="${style}">
@@ -227,18 +227,20 @@
         <p>Έχετε <b>${COURSES.length}</b> μαθήματα και <b class="blink">2.147.483.647</b> μη αναγνωσμένες ανακοινώσεις.</p>
         <p class="tiny">Συμβουλή: για να μπείτε σε μάθημα, πατήστε το μικροσκοπικό μπλε «είσοδος». ΟΧΙ το μεγάλο κόκκινο κουμπί.</p>
       </div>
-      <div class="panel courses-panel">
-        <h2>ΤΑ ΜΑΘΗΜΑΤΑ ΜΟΥ</h2>
-        <div class="course-chaos">${cards}</div>
-      </div>
-      <div class="side-chaos">
-        <div class="sidebox">
-          <h3 class="wobble">ΑΝΑΚΟΙΝΩΣΕΙΣ</h3>
-          <ul>${ANNOUNCEMENTS.map((a) => `<li>${esc(a)}</li>`).join("")}</ul>
+      <div class="home-grid">
+        <div class="panel courses-panel">
+          <h2>ΤΑ ΜΑΘΗΜΑΤΑ ΜΟΥ</h2>
+          <div class="course-chaos">${cards}</div>
         </div>
-        <div class="sidebox">
-          <h3>ΗΜΕΡΟΛΟΓΙΟ</h3>
-          <p>Δεν υπάρχουν γεγονότα. Ή υπάρχουν. Δεν είμαστε σίγουροι.</p>
+        <div>
+          <div class="sidebox">
+            <h3 class="wobble">ΑΝΑΚΟΙΝΩΣΕΙΣ</h3>
+            <ul>${ANNOUNCEMENTS.map((a) => `<li>${esc(a)}</li>`).join("")}</ul>
+          </div>
+          <div class="sidebox">
+            <h3>ΗΜΕΡΟΛΟΓΙΟ</h3>
+            <p>Δεν υπάρχουν γεγονότα. Ή υπάρχουν. Δεν είμαστε σίγουροι.</p>
+          </div>
         </div>
       </div>`;
 

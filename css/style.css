@@ -143,11 +143,21 @@ p { line-height: 1.15; }
 
 /* ---------- home ---------- */
 /* Τα μαθήματα: σκόρπια κουτιά, το καθένα με άλλο στυλ, σε τυχαίες θέσεις (βλ. COURSE_SLOTS στο app.js). */
+.home-grid { display: grid; grid-template-columns: 1.7fr 1fr; gap: 14px 37px; align-items: start; }
+.home-grid > div:last-child { margin-top: 64px; }
+.home-grid > div:last-child .sidebox:first-child { margin-left: -18px; }
+.home-grid > div:last-child .sidebox:last-child { width: 68%; margin-left: 27%; }
+@media (max-width: 760px) {
+  .home-grid { grid-template-columns: 1fr; }
+  .home-grid > div:last-child { margin-top: 10px; }
+  .home-grid > div:last-child .sidebox:last-child { width: auto; margin-left: 18px; }
+}
+
 .course-chaos {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 16px 10px;
-  padding: 10px 0 34px;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px 12px;
+  padding: 6px 0 24px;
 }
 @media (max-width: 760px) { .course-chaos { display: block; } .ccard { margin-bottom: 22px; } }
 .ccard {
@@ -169,11 +179,6 @@ p { line-height: 1.15; }
 .ccard:nth-child(4) .enter-link { color: #6cf; }
 .ccard:nth-child(5) { background: var(--cyan); border-radius: 60px 0 60px 0; align-items: center; text-align: center; padding: 16px 30px; }
 .ccard:nth-child(6) { background: #ffdab0; border: 8px ridge #8b4513; flex-direction: row; flex-wrap: wrap; align-items: center; }
-
-.side-chaos { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 16px; }
-.side-chaos .sidebox:first-child { width: min(46%, 420px); margin-left: 6%; }
-.side-chaos .sidebox:last-child { width: min(30%, 280px); margin-top: 90px; margin-right: 2%; }
-@media (max-width: 760px) { .side-chaos .sidebox:first-child, .side-chaos .sidebox:last-child { width: auto; margin: 0 0 16px 12px; } }
 
 .code { font-family: "Courier New", monospace; font-size: 12px; color: #555; }
 .ctitle { font-family: "Comfortaa", cursive; font-size: 19px; color: #200070; }
