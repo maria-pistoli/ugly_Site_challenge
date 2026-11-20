@@ -158,10 +158,17 @@
       const dy = Math.round(rnd(-6, 20));
       el.style.transform = `translate(${dx}px, ${dy}px) rotate(${rot}deg)`;
     });
-    root.querySelectorAll(".course-table tr").forEach((tr, k) => {
-      if (k) tr.style.transform = `translateX(${Math.round(small ? rnd(-4, 6) : rnd(-12, 30))}px)`;
-    });
   }
+
+  // Θέσεις στο πλέγμα των μαθημάτων (12 στήλες). Δεν επικαλύπτονται, αλλά δεν έχουν και καμία λογική.
+  const COURSE_SLOTS = [
+    { col: "7 / span 6", row: 1 },
+    { col: "1 / span 5", row: 2 },
+    { col: "5 / span 5", row: 3 },
+    { col: "2 / span 4", row: 4 },
+    { col: "9 / span 4", row: 4 },
+    { col: "6 / span 6", row: 5 },
+  ];
 
   // ---------- κουμπιά που φεύγουν ----------
   // Το κουμπί μεταφέρεται στο <body>, γιατί μέσα σε στραβό (transformed) κουτί
@@ -196,16 +203,23 @@
 
   function renderHome() {
     clearRunaways();
-    const rows = COURSES.map((c) => `
-      <tr>
-        <td><span class="code">${esc(c.code)}</span></td>
-        <td><span class="ctitle">${weird(c.title)}</span><br><span class="prof">${esc(c.prof)}</span></td>
-        <td>${unlocked(c.id) ? "🔓" : "🔒"}</td>
-        <td>
-          <button class="big-useless" data-useless>ΑΠΕΓΓΡΑΦΗ</button><br>
+    // Κάθε μάθημα πέφτει σε τυχαία «θέση» ενός πλέγματος 12 στηλών: ένα δεξιά, ένα κάτω, ένα αριστερά...
+    const small = innerWidth < 760;
+    const slots = shuffle(COURSE_SLOTS);
+    const cards = COURSES.map((c, k) => {
+      let style = small
+        ? `width:${Math.round(rnd(70, 94))}%;margin-left:${Math.round(rnd(0, 24))}%;`
+        : `grid-column:${slots[k].col};grid-row:${slots[k].row};justify-self:${pick(["start", "end", "center", "stretch"])};margin-top:${Math.round(rnd(0, 50))}px;`;
+      style += `transform:rotate(${rnd(-5, 5).toFixed(1)}deg)`;
+      return `
+        <div class="ccard" style="${style}">
+          <span class="code">${esc(c.code)} ${unlocked(c.id) ? "🔓" : "🔒"}</span>
+          <span class="ctitle">${weird(c.title)}</span>
+          <span class="prof">${esc(c.prof)}</span>
+          <button class="big-useless" data-useless>ΑΠΕΓΓΡΑΦΗ</button>
           <a class="enter-link" href="#/course/${c.id}">είσοδος →</a>
-        </td>
-      </tr>`).join("");
+        </div>`;
+    }).join("");
 
     app.innerHTML = `
       <div class="panel">
@@ -213,23 +227,18 @@
         <p>Έχετε <b>${COURSES.length}</b> μαθήματα και <b class="blink">2.147.483.647</b> μη αναγνωσμένες ανακοινώσεις.</p>
         <p class="tiny">Συμβουλή: για να μπείτε σε μάθημα, πατήστε το μικροσκοπικό μπλε «είσοδος». ΟΧΙ το μεγάλο κόκκινο κουμπί.</p>
       </div>
-      <div class="home-grid">
-        <div class="panel">
-          <h2>ΤΑ ΜΑΘΗΜΑΤΑ ΜΟΥ</h2>
-          <table class="course-table">
-            <tr><th>Κωδ.</th><th>Μάθημα / Διδάσκων</th><th>?</th><th>Ενέργειες</th></tr>
-            ${rows}
-          </table>
+      <div class="panel courses-panel">
+        <h2>ΤΑ ΜΑΘΗΜΑΤΑ ΜΟΥ</h2>
+        <div class="course-chaos">${cards}</div>
+      </div>
+      <div class="side-chaos">
+        <div class="sidebox">
+          <h3 class="wobble">ΑΝΑΚΟΙΝΩΣΕΙΣ</h3>
+          <ul>${ANNOUNCEMENTS.map((a) => `<li>${esc(a)}</li>`).join("")}</ul>
         </div>
-        <div>
-          <div class="sidebox">
-            <h3 class="wobble">ΑΝΑΚΟΙΝΩΣΕΙΣ</h3>
-            <ul>${ANNOUNCEMENTS.map((a) => `<li>${esc(a)}</li>`).join("")}</ul>
-          </div>
-          <div class="sidebox">
-            <h3>ΗΜΕΡΟΛΟΓΙΟ</h3>
-            <p>Δεν υπάρχουν γεγονότα. Ή υπάρχουν. Δεν είμαστε σίγουροι.</p>
-          </div>
+        <div class="sidebox">
+          <h3>ΗΜΕΡΟΛΟΓΙΟ</h3>
+          <p>Δεν υπάρχουν γεγονότα. Ή υπάρχουν. Δεν είμαστε σίγουροι.</p>
         </div>
       </div>`;
 

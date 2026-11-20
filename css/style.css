@@ -12,7 +12,7 @@
 
 * { box-sizing: content-box; }
 
-html { cursor: wait; }
+html { cursor: wait; overflow-x: hidden; }
 a, button, [role="button"], .opt { cursor: progress; }
 
 body {
@@ -142,24 +142,39 @@ p { line-height: 1.15; }
 @keyframes wob { 50% { transform: rotate(4deg) scale(1.05); } }
 
 /* ---------- home ---------- */
-.home-grid { display: grid; grid-template-columns: 1.7fr 1fr; gap: 14px 37px; }
-@media (max-width: 760px) { .home-grid { grid-template-columns: 1fr; } }
+/* Τα μαθήματα: σκόρπια κουτιά, το καθένα με άλλο στυλ, σε τυχαίες θέσεις (βλ. COURSE_SLOTS στο app.js). */
+.course-chaos {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px 10px;
+  padding: 10px 0 34px;
+}
+@media (max-width: 760px) { .course-chaos { display: block; } .ccard { margin-bottom: 22px; } }
+.ccard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 12px 14px 16px 8px;
+  border: 5px solid #000;
+  box-shadow: 8px 8px 0 #0009;
+}
+.ccard .big-useless { font-size: 17px; padding: 8px 14px; }
+.ccard:nth-child(1) { background: #b0ffb0; border: 6px dotted var(--blood); border-radius: 50% 8% 40% 10% / 20% 30% 10% 40%; padding: 22px 26px; }
+.ccard:nth-child(2) { background: #ffb0e0; border: 6px outset #ff69b4; align-items: flex-end; text-align: right; }
+.ccard:nth-child(3) { background: repeating-linear-gradient(60deg, #fff200 0 14px, #ffd000 14px 28px); border: 4px dashed #000080; flex-direction: column-reverse; }
+.ccard:nth-child(4) { background: #000; border: 6px double var(--lime); }
+.ccard:nth-child(4) .ctitle { color: var(--lime); }
+.ccard:nth-child(4) .prof { color: #ff9; }
+.ccard:nth-child(4) .enter-link { color: #6cf; }
+.ccard:nth-child(5) { background: var(--cyan); border-radius: 60px 0 60px 0; align-items: center; text-align: center; padding: 16px 30px; }
+.ccard:nth-child(6) { background: #ffdab0; border: 8px ridge #8b4513; flex-direction: row; flex-wrap: wrap; align-items: center; }
 
-.course-table { width: 100%; border-collapse: separate; border-spacing: 5px; }
-.course-table td, .course-table th {
-  border: 3px groove var(--hot);
-  padding: 9px 4px 3px 12px;
-  vertical-align: bottom;
-}
-.course-table th {
-  font-family: "Press Start 2P", monospace;
-  font-size: 10px;
-  background: #000;
-  color: var(--lime);
-  text-align: right;
-}
-.course-table tr:nth-child(odd) td { background: #b0ffb0; }
-.course-table tr:nth-child(even) td { background: #ffb0e0; text-align: center; }
+.side-chaos { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.side-chaos .sidebox:first-child { width: min(46%, 420px); margin-left: 6%; }
+.side-chaos .sidebox:last-child { width: min(30%, 280px); margin-top: 90px; margin-right: 2%; }
+@media (max-width: 760px) { .side-chaos .sidebox:first-child, .side-chaos .sidebox:last-child { width: auto; margin: 0 0 16px 12px; } }
+
 .code { font-family: "Courier New", monospace; font-size: 12px; color: #555; }
 .ctitle { font-family: "Comfortaa", cursive; font-size: 19px; color: #200070; }
 .prof { font-size: 12px; font-style: italic; color: #8b4513; }
@@ -371,16 +386,12 @@ p { line-height: 1.15; }
 /* ---------- ακανόνιστη διάταξη: τίποτα δεν είναι στη θέση του ---------- */
 .panel, .sidebox, .tools, .qbox, .slide { transition: transform .5s cubic-bezier(.5, 1.8, .4, .8); }
 #app > .panel:first-child { width: 74%; margin-left: auto; margin-right: 3%; }
-.home-grid { align-items: start; }
-.home-grid > div:last-child { margin-top: 64px; }
-.home-grid > div:last-child .sidebox:first-child { margin-left: -18px; }
-.home-grid > div:last-child .sidebox:last-child { width: 68%; margin-left: 27%; }
 .course-wrap { align-items: start; }
 .course-wrap .tools { margin-top: 85px; }
 #course-main > .panel:nth-child(2) { width: 82%; margin-left: 11%; }
 @media (max-width: 760px) {
-  #app > .panel:first-child, .home-grid > div:last-child .sidebox:last-child { width: auto; margin-left: 18px; }
-  .home-grid > div:last-child, .course-wrap .tools { margin-top: 10px; }
+  #app > .panel:first-child { width: auto; margin-left: 18px; }
+  .course-wrap .tools { margin-top: 10px; }
 }
 
 /* Ακόμα και η χειρότερη πλατφόρμα σέβεται όσους ζητούν λιγότερη κίνηση. */
