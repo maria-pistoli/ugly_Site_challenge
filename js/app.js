@@ -148,7 +148,25 @@
     });
   }
 
+  // ---------- ακανόνιστη διάταξη: κάθε κουτί λίγο στραβό και μετατοπισμένο ----------
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  function scatter(root = app) {
+    const small = innerWidth < 760;
+    root.querySelectorAll(".panel, .sidebox, .tools, .qbox, .slide").forEach((el) => {
+      const rot = rnd(-2.6, 2.6).toFixed(2);
+      const dx = Math.round(small ? rnd(-6, 8) : rnd(-30, 55));
+      const dy = Math.round(rnd(-6, 20));
+      el.style.transform = `translate(${dx}px, ${dy}px) rotate(${rot}deg)`;
+    });
+    root.querySelectorAll(".course-table tr").forEach((tr, k) => {
+      if (k) tr.style.transform = `translateX(${Math.round(small ? rnd(-4, 6) : rnd(-12, 30))}px)`;
+    });
+  }
+
   // ---------- κουμπιά που φεύγουν ----------
+  // Το κουμπί μεταφέρεται στο <body>, γιατί μέσα σε στραβό (transformed) κουτί
+  // το position:fixed μετριέται από το κουτί και όχι από το παράθυρο.
+  const clearRunaways = () => document.querySelectorAll("body > .runaway").forEach((b) => b.remove());
   const TAUNTS = ["Πιάσε με! 😜", "Όχι ακόμα", "Χαχα", "Πιο γρήγορα!"];
   function runaway(btn, times) {
     let n = 0;
@@ -157,6 +175,7 @@
       n++;
       if (e.type === "touchstart") e.preventDefault();
       const r = btn.getBoundingClientRect();
+      if (btn.parentElement !== document.body) document.body.appendChild(btn);
       btn.classList.add("runaway");
       btn.style.left = 10 + Math.random() * Math.max(0, innerWidth - r.width - 20) + "px";
       btn.style.top = 60 + Math.random() * Math.max(0, innerHeight - r.height - 120) + "px";
@@ -176,6 +195,7 @@
   ];
 
   function renderHome() {
+    clearRunaways();
     const rows = COURSES.map((c) => `
       <tr>
         <td><span class="code">${esc(c.code)}</span></td>
@@ -221,6 +241,7 @@
         buttons: [{ label: "Το αποδέχομαι" }],
       });
     });
+    scatter();
   }
 
   // ---------- σελίδα μαθήματος ----------
@@ -233,6 +254,7 @@
     const c = COURSES.find((x) => x.id === id);
     if (!c) { location.hash = "#/"; return; }
     const open = unlocked(c.id);
+    clearRunaways();
 
     app.innerHTML = `
       <div class="panel">
@@ -262,6 +284,7 @@
 
     const main = $("#course-main");
     open ? renderMaterial(c, main) : renderQuizIntro(c, main);
+    scatter();
     if (!skipLoad) fakeLoad("Φόρτωση μαθήματος " + c.code, { short: true });
   }
 
@@ -287,6 +310,7 @@
     function draw() {
       const q = c.quiz[i];
       let sel = null;
+      clearRunaways();
       main.innerHTML = `
         <div class="panel"><div class="qbox">
           <div class="qnum">ΕΡΩΤΗΣΗ ${i + 1} / ${c.quiz.length} <span class="blink">⏰</span></div>
@@ -298,6 +322,7 @@
           <button class="submit" id="sub">ΥΠΟΒΟΛΗ ✔</button>
           <p class="tiny">Υπόδειξη: η σωστή απάντηση είναι μία από τις παραπάνω.</p>
         </div></div>`;
+      scatter(main);
 
       const opts = $(".opts", main);
       opts.addEventListener("click", (e) => {
@@ -402,6 +427,7 @@
 
     function drawSlide() {
       const sl = c.slides[s];
+      clearRunaways();
       box.innerHTML = `
         <div class="slide"><h2>${weird(sl.t, 0.5)}</h2><ul>${sl.b.map((b) => `<li>${esc(b)}</li>`).join("")}</ul></div>
         <div class="slide-nav">
@@ -409,6 +435,7 @@
           <span class="tiny">Διαφάνεια ${s + 1} από ${c.slides.length} (περίπου)</span>
           <button id="pv">Προηγούμενη ▶</button>
         </div>`;
+      scatter(box);
       const nx = $("#nx", box);
       if (firstNext) { runaway(nx, 1); firstNext = false; }
       nx.onclick = () => {

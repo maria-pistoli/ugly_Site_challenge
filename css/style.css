@@ -368,6 +368,21 @@ p { line-height: 1.15; }
 #counter { font-family: "Press Start 2P", monospace; background: #222; color: var(--lime); padding: 2px 6px; }
 .disclaimer { color: #888; font-size: 11px; }
 
+/* ---------- ακανόνιστη διάταξη: τίποτα δεν είναι στη θέση του ---------- */
+.panel, .sidebox, .tools, .qbox, .slide { transition: transform .5s cubic-bezier(.5, 1.8, .4, .8); }
+#app > .panel:first-child { width: 74%; margin-left: auto; margin-right: 3%; }
+.home-grid { align-items: start; }
+.home-grid > div:last-child { margin-top: 64px; }
+.home-grid > div:last-child .sidebox:first-child { margin-left: -18px; }
+.home-grid > div:last-child .sidebox:last-child { width: 68%; margin-left: 27%; }
+.course-wrap { align-items: start; }
+.course-wrap .tools { margin-top: 85px; }
+#course-main > .panel:nth-child(2) { width: 82%; margin-left: 11%; }
+@media (max-width: 760px) {
+  #app > .panel:first-child, .home-grid > div:last-child .sidebox:last-child { width: auto; margin-left: 18px; }
+  .home-grid > div:last-child, .course-wrap .tools { margin-top: 10px; }
+}
+
 /* Ακόμα και η χειρότερη πλατφόρμα σέβεται όσους ζητούν λιγότερη κίνηση. */
 @media (prefers-reduced-motion: reduce) {
   body, #bg-tiles, .wobble, .blink, .trail { animation: none !important; }
